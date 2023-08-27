@@ -9,15 +9,7 @@ public class Reservas {
     private Integer valor;
     private String forma_pago;
     private Huespedes huesped;
-
-    //Constructor que recibe el objeto reservas desde la base de datos.
-    public Reservas(int id, Date fechaEntrada, Date fechaSalida, int valor, String formaPago) {
-        this.idReservas = id;
-        this.fecha_entrada = fechaEntrada;
-        this.fecha_salida = fechaSalida;
-        this.valor = valor;
-        this.forma_pago = formaPago;
-    }
+    private Habitaciones habitacion;
 
     public Reservas() {
 
@@ -69,6 +61,17 @@ public class Reservas {
 
     public void setHuesped(Huespedes huesped) {
         this.huesped = huesped;
+    }
+
+    public Habitaciones getHabitacion() {
+        return habitacion;
+    }
+
+    public void setHabitacion(Habitaciones habitacion) {
+        this.habitacion = habitacion;
+    }
+    public boolean tieneAsignado(){
+        return this.huesped != null;
     }
 
     @Override

@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Date;
 
 public class HuespedesDAO {
 
@@ -17,45 +16,32 @@ public class HuespedesDAO {
 
     public HuespedesDAO() {
         this.connection = new ConexionBaseDeDatos().obtenerConexion();
+        System.out.println("Abriendo daoHuesped");
     }
 
 
     public void guardar(Huespedes huespedes) {
-        try(PreparedStatement stmt = connection.prepareStatement("INSERT INTO huespedes (nombre,apellido,fecha_nacimiento,nacionalidad,telefono) VALUES (?,?,?,?,?)")){
-            stmt.setString(1,huespedes.getNombre());
-            stmt.setString(2,huespedes.getApellido());
-            stmt.setDate(3,huespedes.getFecha_nacimiento());
-            stmt.setString(4,huespedes.getNacionalidad());
-            stmt.setString(5,huespedes.getTelefono());
+        try(PreparedStatement stmt = connection.prepareStatement("INSERT INTO huespedes (id,nombre,apellido,fecha_nacimiento,nacionalidad,telefono) VALUES (?,?,?,?,?,?)")){
+            stmt.setString(1, huespedes.getId());
+            stmt.setString(2,huespedes.getNombre());
+            stmt.setString(3,huespedes.getApellido());
+            stmt.setDate(4,huespedes.getFecha_nacimiento());
+            stmt.setString(5,huespedes.getNacionalidad());
+            stmt.setString(6,huespedes.getTelefono());
             stmt.execute();
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
         System.out.println("Conexion desde guardar huesped");
     }
-//obtiene el id del objeto huesped recien guardado en la base de datos
-    public Integer obtenerIdGenerado() {
-        int id = 0;
-        try(PreparedStatement statement = connection.prepareStatement("SELECT LAST_INSERT_ID() AS id")){
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()){
-                id = resultSet.getInt("id");
-            }
-        }catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-        System.out.println("Conexion desde obtener id generado huesped");
-        return id;
-    }
 
-    //Devuelve el objeto huesped con el  id generado
-    public Huespedes asignarHuesped(Integer id){
+    public Huespedes buscar(String id){
         Huespedes huespedes = new Huespedes();
         try(PreparedStatement statement = connection.prepareStatement("SELECT * FROM huespedes WHERE id = ?")){
-            statement.setInt(1,id);
+            statement.setString(1,id);
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
-                huespedes.setId(resultSet.getInt("id"));
+                huespedes.setId(resultSet.getString("id"));
                 huespedes.setNombre(resultSet.getString("nombre"));
                 huespedes.setApellido(resultSet.getString("apellido"));
                 huespedes.setFecha_nacimiento(resultSet.getDate("fecha_nacimiento"));
@@ -65,7 +51,7 @@ public class HuespedesDAO {
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
-        System.out.println("Conexion desde asignar huesped");
+        System.out.println("Conexion desde buscar huesped");
         return huespedes;
     }
 
@@ -75,7 +61,7 @@ public class HuespedesDAO {
             try(ResultSet resultSet = statement.executeQuery()){
                 while (resultSet.next()){
                     Huespedes h = new Huespedes();
-                    h.setId(resultSet.getInt("id"));
+                    h.setId(resultSet.getString("id"));
                     h.setNombre(resultSet.getString("nombre"));
                     h.setApellido(resultSet.getString("apellido"));
                     h.setTelefono(resultSet.getString("telefono"));
@@ -87,29 +73,34 @@ public class HuespedesDAO {
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
+        System.out.println("Conexion desde listar huesped");
         return listaHuespedes;
     }
 
-    public void eliminar(Integer id) {
+    public void eliminar(String id) {
         try(PreparedStatement statement = connection.prepareStatement("DELETE FROM huespedes WHERE id = ?")){
-            statement.setInt(1,id);
+            statement.setString(1,id);
             statement.execute();
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
+        System.out.println("Conexion desde eliminar huesped");
+
     }
 
     public void editar(Huespedes huespede) {
-        try(PreparedStatement statement = connection.prepareStatement("UPDATE huespedes SET (nombre=?,apellido=?,fecha_nacimiento=?,nacionalidad=?,telefono=?) WHERE id=?")){
+        try(PreparedStatement statement = connection.prepareStatement("UPDATE huespedes SET nombre=?,apellido=?,fecha_nacimiento=?,nacionalidad=?,telefono=? WHERE id=?")){
             statement.setString(1,huespede.getNombre());
             statement.setString(2,huespede.getApellido());
             statement.setDate(3,huespede.getFecha_nacimiento());
             statement.setString(4, huespede.getNacionalidad());
             statement.setString(5, huespede.getTelefono());
-            statement.setInt(6,huespede.getId());
+            statement.setString(6,huespede.getId());
             statement.execute();
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
+        System.out.println("Conexion desde editar huesped");
+
     }
 }

@@ -11,7 +11,9 @@ import javax.swing.ImageIcon;
 import java.awt.Color;
 import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
+import controler.HabitacionesController;
 import controler.ReservasControler;
+import modelo.Habitaciones;
 import modelo.Reservas;
 
 import java.awt.Font;
@@ -36,6 +38,7 @@ import static java.lang.Integer.valueOf;
 public class 	ReservasView extends JFrame {
 
 	private JPanel contentPane;
+	private JComboBox<String> tipoHabitacion;
 	public static JTextField txtValor;
 	public static JDateChooser txtFechaEntrada;
 	public static JDateChooser txtFechaSalida;
@@ -44,6 +47,7 @@ public class 	ReservasView extends JFrame {
 	private JLabel labelExit;
 	private JLabel labelAtras;
 	private ReservasControler reservasControler;
+	private HabitacionesController habitacionesController;
 
 
 	/**
@@ -68,6 +72,7 @@ public class 	ReservasView extends JFrame {
 	public ReservasView() {
 		super("Reserva");
 		this.reservasControler = new ReservasControler();
+		this.habitacionesController = new HabitacionesController();
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ReservasView.class.getResource("/imagenes/aH-40px.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 560);
@@ -93,44 +98,52 @@ public class 	ReservasView extends JFrame {
 		
 		// Código que crea los elementos de la interfáz gráfica
 		
-		JSeparator separator_1_2 = new JSeparator();
+	/*	JSeparator separator_1_2 = new JSeparator();
 		separator_1_2.setForeground(SystemColor.textHighlight);
-		separator_1_2.setBounds(68, 195, 289, 2);
+		separator_1_2.setBounds(68, 210, 289, 2);
 		separator_1_2.setBackground(SystemColor.textHighlight);
 		panel.add(separator_1_2);
 		
 		JSeparator separator_1_3 = new JSeparator();
 		separator_1_3.setForeground(SystemColor.textHighlight);
 		separator_1_3.setBackground(SystemColor.textHighlight);
-		separator_1_3.setBounds(68, 453, 289, 2);
+		separator_1_3.setBounds(68, 468, 289, 2);
 		panel.add(separator_1_3);
 		
 		JSeparator separator_1_1 = new JSeparator();
 		separator_1_1.setForeground(SystemColor.textHighlight);
-		separator_1_1.setBounds(68, 281, 289, 11);
+		separator_1_1.setBounds(68, 296, 289, 11);
 		separator_1_1.setBackground(SystemColor.textHighlight);
 		panel.add(separator_1_1);
-		
+
+
+	 */
+		JLabel lblTipoHabitacion = new JLabel("TIPO DE HABITACIÓN");
+		lblTipoHabitacion.setForeground(SystemColor.textInactiveText);
+		lblTipoHabitacion.setBounds(68, 66, 169, 14);
+		lblTipoHabitacion.setFont(new Font("Roboto Black", Font.PLAIN, 18));
+		panel.add(lblTipoHabitacion);
+
 		JLabel lblCheckIn = new JLabel("FECHA DE CHECK IN");
 		lblCheckIn.setForeground(SystemColor.textInactiveText);
-		lblCheckIn.setBounds(68, 136, 169, 14);
+		lblCheckIn.setBounds(68, 146, 169, 14);
 		lblCheckIn.setFont(new Font("Roboto Black", Font.PLAIN, 18));
 		panel.add(lblCheckIn);
 		
 		JLabel lblCheckOut = new JLabel("FECHA DE CHECK OUT");
 		lblCheckOut.setForeground(SystemColor.textInactiveText);
-		lblCheckOut.setBounds(68, 221, 187, 14);
+		lblCheckOut.setBounds(68, 231, 187, 14);
 		lblCheckOut.setFont(new Font("Roboto Black", Font.PLAIN, 18));
 		panel.add(lblCheckOut);
 		
 		JLabel lblFormaPago = new JLabel("FORMA DE PAGO");
 		lblFormaPago.setForeground(SystemColor.textInactiveText);
-		lblFormaPago.setBounds(68, 382, 187, 24);
+		lblFormaPago.setBounds(68, 392, 187, 24);
 		lblFormaPago.setFont(new Font("Roboto Black", Font.PLAIN, 18));
 		panel.add(lblFormaPago);
 		
 		JLabel lblTitulo = new JLabel("SISTEMA DE RESERVAS");
-		lblTitulo.setBounds(109, 60, 219, 42);
+		lblTitulo.setBounds(109, 15, 230, 42);
 		lblTitulo.setForeground(new Color(12, 138, 199));
 		lblTitulo.setFont(new Font("Roboto", Font.BOLD, 20));
 		panel.add(lblTitulo);
@@ -250,14 +263,23 @@ public class 	ReservasView extends JFrame {
 		lblSiguiente.setForeground(Color.WHITE);
 		lblSiguiente.setFont(new Font("Roboto", Font.PLAIN, 18));
 		lblSiguiente.setBounds(0, 0, 122, 35);
-		
-		
+
+
+		tipoHabitacion = new JComboBox();
+		tipoHabitacion.setBounds(68, 101, 289, 38);
+		tipoHabitacion.setBackground(SystemColor.text);
+		tipoHabitacion.setBorder(new LineBorder(new Color(255, 255, 255), 1, true));
+		tipoHabitacion.setFont(new Font("Roboto", Font.PLAIN, 16));
+		tipoHabitacion.setModel(new DefaultComboBoxModel(new String[] {"Sencilla", "Matrimonial", "suit"}));
+		panel.add(tipoHabitacion);
+
+
 		//Campos que guardaremos en la base de datos
 		txtFechaEntrada = new JDateChooser();
 		txtFechaEntrada.getCalendarButton().setBackground(SystemColor.textHighlight);
 		txtFechaEntrada.getCalendarButton().setIcon(new ImageIcon(ReservasView.class.getResource("/imagenes/icon-reservas.png")));
 		txtFechaEntrada.getCalendarButton().setFont(new Font("Roboto", Font.PLAIN, 12));
-		txtFechaEntrada.setBounds(68, 161, 289, 35);
+		txtFechaEntrada.setBounds(68, 171, 289, 35);
 		txtFechaEntrada.getCalendarButton().setBounds(268, 0, 21, 33);
 		txtFechaEntrada.setBackground(Color.WHITE);
 		txtFechaEntrada.setBorder(new LineBorder(SystemColor.window));
@@ -268,7 +290,7 @@ public class 	ReservasView extends JFrame {
 		txtFechaSalida = new JDateChooser();
 		txtFechaSalida.getCalendarButton().setIcon(new ImageIcon(ReservasView.class.getResource("/imagenes/icon-reservas.png")));
 		txtFechaSalida.getCalendarButton().setFont(new Font("Roboto", Font.PLAIN, 11));
-		txtFechaSalida.setBounds(68, 246, 289, 35);
+		txtFechaSalida.setBounds(68, 256, 289, 35);
 		txtFechaSalida.getCalendarButton().setBounds(267, 1, 21, 31);
 		txtFechaSalida.setBackground(Color.WHITE);
 		txtFechaSalida.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -278,7 +300,7 @@ public class 	ReservasView extends JFrame {
 				if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {
 					//Para mostrar el signo de pesos seguido del valor en formato decimal
 					DecimalFormat df = new DecimalFormat("#,###");
-					long valorEstadia = reservasControler.calcularValorEstadía(txtFechaEntrada,txtFechaSalida);
+					long valorEstadia = reservasControler.calcularValorEstadia(txtFechaEntrada,txtFechaSalida);
 					txtValor.setText("$ " + String.valueOf(df.format(valorEstadia)));
 				}
 			}
@@ -293,7 +315,7 @@ public class 	ReservasView extends JFrame {
 		txtValor.setBackground(SystemColor.text);
 		txtValor.setHorizontalAlignment(SwingConstants.CENTER);
 		txtValor.setForeground(Color.BLACK);
-		txtValor.setBounds(78, 328, 100, 33);
+		txtValor.setBounds(78, 338, 100, 33);
 		txtValor.setEditable(false);
 		txtValor.setFont(new Font("Roboto Black", Font.BOLD, 17));
 		txtValor.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -302,7 +324,7 @@ public class 	ReservasView extends JFrame {
 
 
 		txtFormaPago = new JComboBox();
-		txtFormaPago.setBounds(68, 417, 289, 38);
+		txtFormaPago.setBounds(68, 427, 289, 38);
 		txtFormaPago.setBackground(SystemColor.text);
 		txtFormaPago.setBorder(new LineBorder(new Color(255, 255, 255), 1, true));
 		txtFormaPago.setFont(new Font("Roboto", Font.PLAIN, 16));
@@ -321,9 +343,19 @@ public class 	ReservasView extends JFrame {
 					reserva.setFecha_salida(new java.sql.Date(txtFechaSalida.getDate().getTime()));
 					reserva.setValor(formatearValor());
 					reserva.setForma_pago(txtFormaPago.getSelectedItem().toString());
+					System.out.println(tipoHabitacion.getSelectedIndex());
+					//verifica que queden habitaciones disponibles
+					if(habitacionesController.verificarDisponibilidadHabitaciones(tipoHabitacion.getSelectedIndex() + 1)){
+						var habitacion = new Habitaciones();
+						habitacion.setId(tipoHabitacion.getSelectedIndex() + 1);
+						reserva.setHabitacion(habitacion);
+						RegistroHuesped registro = new RegistroHuesped(reserva);
+						registro.setVisible(true);
+						dispose();
+					}else{
+						JOptionPane.showMessageDialog(null,"No hay reservas disponibles");
+					}
 
-					RegistroHuesped registro = new RegistroHuesped(reserva);
-					registro.setVisible(true);
 				} else {
 					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
 				}

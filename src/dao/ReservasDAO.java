@@ -15,14 +15,16 @@ public class ReservasDAO {
     private Connection connection;
     public ReservasDAO(){
         this.connection = new ConexionBaseDeDatos().obtenerConexion();
+        System.out.println("Conexion daoREservas");
     }
     public void guardar(Reservas reserva) {
-        try(PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO reservas (fecha_entrada,fecha_salida,valor,forma_pago,huesped_id) VALUES (?,?,?,?,?)")){
+        try(PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO reservas (fecha_entrada,fecha_salida,valor,forma_pago,huesped_id,habitacion) VALUES (?,?,?,?,?,?)")){
             preparedStatement.setDate(1,reserva.getFecha_entrada());
             preparedStatement.setDate(2,reserva.getFecha_salida());
             preparedStatement.setInt(3,reserva.getValor());
             preparedStatement.setString(4,reserva.getForma_pago());
-            preparedStatement.setInt(5,reserva.getHuesped().getId());
+            preparedStatement.setString(5,reserva.getHuesped().getId());
+            preparedStatement.setInt(6,reserva.getHabitacion().getId());
             preparedStatement.execute();
         }catch (SQLException e){
             throw new RuntimeException(e);
@@ -43,7 +45,7 @@ public class ReservasDAO {
                 r.setValor(resultSet.getInt("valor"));
                 r.setForma_pago(resultSet.getString("forma_pago"));
                 Huespedes huespedes = new Huespedes();
-                huespedes.setId(resultSet.getInt("huesped_id"));
+                huespedes.setId(resultSet.getString("huesped_id"));
                 huespedes.setNombre(resultSet.getString("nombre"));
                 r.setHuesped(huespedes);
                 reservas.add(r);
@@ -94,7 +96,7 @@ public class ReservasDAO {
                           r.setValor(resultSet.getInt("valor"));
                           r.setForma_pago(resultSet.getString("forma_pago"));
                           Huespedes h = new Huespedes();
-                          h.setId(resultSet.getInt("huesped_id"));
+                          h.setId(resultSet.getString("huesped_id"));
                           h.setNombre(resultSet.getString("nombre"));
                           r.setHuesped(h);
                 }
@@ -104,5 +106,20 @@ public class ReservasDAO {
         }
         System.out.println("conexion desde buscar reservas por id");
         return r;
+    }
+
+    public boolean buscar(String id) {
+        boolean flag = false;
+        try(PreparedStatement statement = connection.prepareStatement("select * from reservas where huesped_id=?")){
+            statement.setString(1,id);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()){
+                flag = true;
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        System.out.println(flag);
+        return flag;
     }
 }

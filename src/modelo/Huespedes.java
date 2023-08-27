@@ -3,7 +3,7 @@ package modelo;
 import java.sql.Date;
 
 public class Huespedes {
-    private Integer id;
+    private String  id;
     private String nombre;
     private String apellido;
     private Date fecha_nacimiento;
@@ -11,14 +11,8 @@ public class Huespedes {
     private String telefono;
 
     public Huespedes(){}
-    public Huespedes(String nombre, String apellido, java.sql.Date fecha_nacimiento, String telefono) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.fecha_nacimiento = fecha_nacimiento;
-        this.telefono = telefono;
-    }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
@@ -38,7 +32,7 @@ public class Huespedes {
         return telefono;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

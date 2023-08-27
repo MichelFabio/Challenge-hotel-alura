@@ -1,12 +1,12 @@
 package views;
 
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import java.awt.Color;
 import com.toedter.calendar.JDateChooser;
+import controler.HabitacionesController;
 import controler.HuespedesController;
 import controler.ReservasControler;
 import modelo.Huespedes;
@@ -18,14 +18,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.Font;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import java.awt.SystemColor;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.text.Format;
-import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
@@ -34,11 +31,10 @@ import javax.swing.JSeparator;
 public class RegistroHuesped extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtId;
 	private JTextField txtNombre;
 	private JTextField txtApellido;
 	private JTextField txtTelefono;
-	private JTextField txtNreserva;
+	private JTextField txtId;
 	private JDateChooser txtFechaN;
 	private JComboBox<Format> txtNacionalidad;
 	private JLabel labelExit;
@@ -46,32 +42,16 @@ public class RegistroHuesped extends JFrame {
 	private Reservas reservas;
 	private ReservasControler reservasControler;
 	private HuespedesController huespedesController;
+	private HabitacionesController habitacionesController;
 	int xMouse, yMouse;
 
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RegistroHuesped frame = new RegistroHuesped();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
-
-	/**
-	 * Create the frame.
-	 */
 	public RegistroHuesped(Reservas reservas) {
 
 		this.reservasControler = new ReservasControler();
 		this.huespedesController = new HuespedesController();
+		this.habitacionesController = new HabitacionesController();
 		this.reservas = reservas;
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroHuesped.class.getResource("/imagenes/lOGO-50PX.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 634);
@@ -136,13 +116,13 @@ public class RegistroHuesped extends JFrame {
 		btnAtras.add(labelAtras);
 
 
-		txtNreserva = new JTextField();
-		txtNreserva.setBounds(560, 135, 285, 33);
-		txtNreserva.setFont(new Font("Roboto", Font.PLAIN, 16));
-		txtNreserva.setColumns(10);
-		txtNreserva.setBackground(Color.WHITE);
-		txtNreserva.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		contentPane.add(txtNreserva);
+		txtId = new JTextField();
+		txtId.setBounds(560, 135, 285, 33);
+		txtId.setFont(new Font("Roboto", Font.PLAIN, 16));
+		txtId.setColumns(10);
+		txtId.setBackground(Color.WHITE);
+		txtId.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		contentPane.add(txtId);
 
 		
 		txtNombre = new JTextField();
@@ -271,8 +251,15 @@ public class RegistroHuesped extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				//Si todos los campos han sido llenados guarde el huésped en la base de datos
-				if (txtNombre.getText() != null  && txtApellido != null && txtFechaN.getDate() != null && txtNacionalidad.getSelectedItem().toString() != null  && txtTelefono.getText() != null) {
+				if (	txtId.getText() != null &&
+						txtNombre.getText() != null  &&
+						txtApellido != null &&
+						txtFechaN.getDate() != null &&
+						txtNacionalidad.getSelectedItem().toString() != null  &&
+						txtTelefono.getText() != null)
+				{
 					var huespedes = new Huespedes();
+					huespedes.setId(txtId.getText());
 					huespedes.setNombre(txtNombre.getText());
 					huespedes.setApellido(txtApellido.getText());
 					huespedes.setFecha_nacimiento(new java.sql.Date(txtFechaN.getDate().getTime()));
@@ -280,9 +267,10 @@ public class RegistroHuesped extends JFrame {
 					huespedes.setTelefono(txtTelefono.getText());
 
 					huespedesController.guardar(huespedes);
-					var h = huespedesController.asignarHuesped();
-					reservas.setHuesped(h);
-					reservasControler.guardar(reservas);
+					reservas.setHuesped(huespedes);
+					reservasControler.guardarReserva(reservas);
+					habitacionesController.modificarCuposHabitaciones(reservas.getHabitacion().getId(), 1);
+
 
 					Exito exito = new Exito();
 					exito.setVisible(true);

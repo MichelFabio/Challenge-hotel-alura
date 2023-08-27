@@ -3,8 +3,6 @@ package controler;
 import dao.HuespedesDAO;
 import modelo.Huespedes;
 
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HuespedesController {
@@ -19,23 +17,18 @@ public class HuespedesController {
 
         huespedesDAO.guardar(huespedes);
     }
-    private Integer obtenerIdGenerado(){
-        return huespedesDAO.obtenerIdGenerado();
-    }
-    public Huespedes asignarHuesped(){
-        Integer id = obtenerIdGenerado();
-        return huespedesDAO.asignarHuesped(id);
+
+    public Huespedes buscarHuesped(String id){
+        return huespedesDAO.buscar(id);
     }
 
     public List<Huespedes> listar() {
         return huespedesDAO.listar();
     }
 
-    public Huespedes buscar(Integer i) {
-        return huespedesDAO.asignarHuesped(i);
-    }
 
-    public void eliminar(Integer id) {
+
+    public void eliminar(String id) {
         huespedesDAO.eliminar(id);
     }
 
