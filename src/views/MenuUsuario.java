@@ -1,5 +1,7 @@
 package views;
 
+import controler.ReservasControler;
+
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -28,6 +30,7 @@ public class MenuUsuario extends JFrame {
 	int xMouse, yMouse;
 	private JLabel labelExit;
 	private JLabel labelRegistro;
+	private ReservasControler reservasControler;
 
 	/**
 	 * Launch the application.
@@ -49,6 +52,7 @@ public class MenuUsuario extends JFrame {
 	 * Create the frame.
 	 */
 	public MenuUsuario() {
+		this.reservasControler = new ReservasControler();
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MenuUsuario.class.getResource("/imagenes/aH-40px.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 944, 609);
@@ -98,6 +102,7 @@ public class MenuUsuario extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				reservasControler.cargarReservas();
 				ReservasView reservas = new ReservasView();
 				reservas.setVisible(true);
 				dispose();

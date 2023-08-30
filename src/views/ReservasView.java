@@ -270,7 +270,7 @@ public class 	ReservasView extends JFrame {
 		tipoHabitacion.setBackground(SystemColor.text);
 		tipoHabitacion.setBorder(new LineBorder(new Color(255, 255, 255), 1, true));
 		tipoHabitacion.setFont(new Font("Roboto", Font.PLAIN, 16));
-		tipoHabitacion.setModel(new DefaultComboBoxModel(new String[] {"Sencilla", "Matrimonial", "suit"}));
+		tipoHabitacion.setModel(new DefaultComboBoxModel(new String[] {"Matrimonial", "suit","Sencilla"}));
 		panel.add(tipoHabitacion);
 
 
@@ -300,7 +300,7 @@ public class 	ReservasView extends JFrame {
 				if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {
 					//Para mostrar el signo de pesos seguido del valor en formato decimal
 					DecimalFormat df = new DecimalFormat("#,###");
-					long valorEstadia = reservasControler.calcularValorEstadia(txtFechaEntrada,txtFechaSalida);
+					long valorEstadia = reservasControler.calcularValorEstadia(txtFechaEntrada,txtFechaSalida,tipoHabitacion.getSelectedItem().toString());
 					txtValor.setText("$ " + String.valueOf(df.format(valorEstadia)));
 				}
 			}

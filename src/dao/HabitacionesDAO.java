@@ -48,4 +48,20 @@ public class HabitacionesDAO {
 
         System.out.println("update");
     }
+
+    public long getFactorPrecio(String tipoHabitacion) {
+        long v = 0;
+        try(PreparedStatement statement = connection.prepareStatement("select valor from habitaciones where tipo = ?")){
+            statement.setString(1,tipoHabitacion);
+            try(ResultSet rs = statement.executeQuery();){
+                if (rs.next()){
+                    v = rs.getInt(1);
+                }
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        System.out.println(v);
+        return v;
+    }
 }

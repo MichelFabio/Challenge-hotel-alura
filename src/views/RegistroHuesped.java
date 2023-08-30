@@ -269,7 +269,7 @@ public class RegistroHuesped extends JFrame {
 					huespedesController.guardar(huespedes);
 					reservas.setHuesped(huespedes);
 					reservasControler.guardarReserva(reservas);
-					habitacionesController.modificarCuposHabitaciones(reservas.getHabitacion().getId(), 1);
+					habitacionesController.modificarCuposHabitaciones(reservas.getHabitacion().getId(), -1);
 
 
 					Exito exito = new Exito();

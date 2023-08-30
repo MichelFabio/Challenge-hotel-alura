@@ -101,6 +101,7 @@ public class Busqueda extends JFrame {
 		modelo.addColumn("Valor");
 		modelo.addColumn("Forma de Pago");
 		modelo.addColumn("huesped_id");
+		modelo.addColumn("habitacion");
 		JScrollPane scroll_table = new JScrollPane(tbReservas);
 		panel.addTab("Reservas", new ImageIcon(Busqueda.class.getResource("/imagenes/reservado.png")), scroll_table, null);
 		scroll_table.setVisible(true);
@@ -367,9 +368,11 @@ public class Busqueda extends JFrame {
 
 		Optional.ofNullable(modelo.getValueAt(tbReservas.getSelectedRow(), tbReservas.getSelectedColumn()))
 				.ifPresentOrElse(fila -> {
-					Integer id = Integer.valueOf( modelo.getValueAt(tbReservas.getSelectedRow(), 0).toString());
+					int id = Integer.parseInt(modelo.getValueAt(tbReservas.getSelectedRow(), 0).toString());
+					int idHabitacion = Integer.parseInt(modelo.getValueAt(tbReservas.getSelectedRow(),6).toString());
+					System.out.println(idHabitacion);
 					reservasControler.eliminarReserva(id);
-					habitacionesController.modificarCuposHabitaciones(id,1);
+					habitacionesController.modificarCuposHabitaciones(idHabitacion,1);
 				}, () -> JOptionPane.showMessageDialog(this, "Por favor, elije un item"));
 	}
 	private void eliminarHuesped(){
@@ -436,7 +439,8 @@ public class Busqueda extends JFrame {
 						reserva.getFecha_salida(),
 						reserva.getValor(),
 						reserva.getForma_pago(),
-						reserva.getHuesped().getId()}));
+						reserva.getHuesped().getId(),
+						reserva.getHabitacion().getId()}));
 
 
 

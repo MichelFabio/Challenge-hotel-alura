@@ -16,4 +16,8 @@ public class HabitacionesController {
     public void modificarCuposHabitaciones(int id, int reflector) {
         habitacionesDAO.modificar(id,reflector);
     }
+
+    public long getFactorPrecio(String tipoHabitacion) {
+        return habitacionesDAO.getFactorPrecio(tipoHabitacion);
+    }
 }

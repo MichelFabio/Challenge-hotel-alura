@@ -1,14 +1,13 @@
 package dao;
 
 import conexiones.ConexionBaseDeDatos;
+import modelo.Habitaciones;
 import modelo.Huespedes;
 import modelo.Reservas;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class ReservasDAO {
@@ -48,6 +47,9 @@ public class ReservasDAO {
                 huespedes.setId(resultSet.getString("huesped_id"));
                 huespedes.setNombre(resultSet.getString("nombre"));
                 r.setHuesped(huespedes);
+                Habitaciones habitacion = new Habitaciones();
+                habitacion.setId(resultSet.getInt("habitacion"));
+                r.setHabitacion(habitacion);
                 reservas.add(r);
             }
 
@@ -121,5 +123,16 @@ public class ReservasDAO {
         }
         System.out.println(flag);
         return flag;
+    }
+//Cada vez que cargue el menu usuario elimine las reservas que ya pasaron
+    public void cargar() {
+        try(PreparedStatement statement = connection.prepareStatement("DELETE FROM reservas WHERE fecha_salida < ?") ){
+            Calendar fechaActual = Calendar.getInstance();
+            statement.setDate(1,
+                    new Date (fechaActual.getTimeInMillis()));
+            statement.execute();
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
     }
 }
